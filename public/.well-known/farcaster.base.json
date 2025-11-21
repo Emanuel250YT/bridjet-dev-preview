@@ -1,0 +1,36 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjE0NTU4MjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHg3YTQ0NzBCZjk1RWUyODdjQmIwYUUyN2UyM2E2ZGE5OTY0MDRlNDQ5In0",
+    "payload": "eyJkb21haW4iOiJiYXNlLmxvY2FsdG8ubmV0In0",
+    "signature": "NKhM6wpFejHVEFZcsuaDKyalEjS+IvGc50rCSt+KzpMLh7qGYXutbtMYBf0CKVmvsF4ph7mI0Dv38wL4yBEpcBs="
+  },
+  "baseBuilder": {
+    "ownerAddress": "0xd2b75c60332Fc9f11c6c62Bb1cF7f08935AB95E5"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Example Mini App",
+    "homeUrl": "https://base.localto.net/",
+    "iconUrl": "https://base.localto.net/banner.png",
+    "splashImageUrl": "https://base.localto.net/banner.png",
+    "splashBackgroundColor": "#000000",
+    "webhookUrl": "https://ex.co/api/webhook",
+    "subtitle": "Fast, fun, social",
+    "description": "A fast, fun way to challenge friends in real time.",
+    "screenshotUrls": [
+      "https://base.localto.net/banner.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "example",
+      "miniapp",
+      "baseapp"
+    ],
+    "heroImageUrl": "https://base.localto.net/banner.png",
+    "tagline": "Play instantly",
+    "ogTitle": "Example Mini App",
+    "ogDescription": "Challenge friends in real time.",
+    "ogImageUrl": "https://base.localto.net/banner.png",
+    "noindex": true
+  }
+}

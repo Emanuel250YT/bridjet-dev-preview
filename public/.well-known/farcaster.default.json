@@ -1,0 +1,34 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjE0NTU4MjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHg3YTQ0NzBCZjk1RWUyODdjQmIwYUUyN2UyM2E2ZGE5OTY0MDRlNDQ5In0",
+    "payload": "eyJkb21haW4iOiJsb2NhbGhvc3Q6NTE3MyJ9",
+    "signature": "NKhM6wpFejHVEFZcsuaDKyalEjS+IvGc50rCSt+KzpMLh7qGYXutbtMYBf0CKVmvsF4ph7mI0Dv38wL4yBEpcBs="
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Example Mini App",
+    "homeUrl": "http://localhost:5173/",
+    "iconUrl": "http://localhost:5173/banner.png",
+    "splashImageUrl": "http://localhost:5173/banner.png",
+    "splashBackgroundColor": "#000000",
+    "webhookUrl": "https://ex.co/api/webhook",
+    "subtitle": "Fast, fun, social",
+    "description": "A fast, fun way to challenge friends in real time.",
+    "screenshotUrls": [
+      "http://localhost:5173/banner.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "example",
+      "miniapp",
+      "default"
+    ],
+    "heroImageUrl": "http://localhost:5173/banner.png",
+    "tagline": "Play instantly",
+    "ogTitle": "Example Mini App",
+    "ogDescription": "Challenge friends in real time.",
+    "ogImageUrl": "http://localhost:5173/banner.png",
+    "noindex": true
+  }
+}
+
