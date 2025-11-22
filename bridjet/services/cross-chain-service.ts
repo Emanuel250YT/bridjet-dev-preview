@@ -70,13 +70,20 @@ class CrossChainService {
   public areNetworksCompatible(fromChainId: number, toChainId: number): boolean {
     // Lista de redes que soportan transferencias directas entre ellas
     const compatibleNetworks: Record<number, number[]> = {
-      1: [1], // Ethereum mainnet
-      137: [137], // Polygon
+      1: [1],         // Ethereum mainnet
+      8453: [8453],   // Base
+      10: [10],       // Optimism
+      137: [137],     // Polygon
+      42161: [42161], // Arbitrum
+      43114: [43114], // Avalanche
+      56: [56],       // BSC
+      59144: [59144], // Linea
+      146: [146],     // Sonic
+      1301: [1301],   // Unichain
+      100: [100],     // Gnosis
+      324: [324],     // zkSync
       42220: [42220], // Celo
       44787: [44787], // Celo Alfajores
-      42161: [42161], // Arbitrum
-      10: [10], // Optimism
-      8453: [8453], // Base
     }
 
     const compatibles = compatibleNetworks[fromChainId] || []
@@ -132,9 +139,22 @@ class CrossChainService {
     return quote.tx
   }
 
-  // Verificar si una red soporta 1inch
+  // Verificar si una red soporta 1inch Fusion+
   public isNetworkSupported(chainId: number): boolean {
-    const supported = [1, 137, 42161, 10, 8453]
+    const supported = [
+      1,      // Ethereum Mainnet
+      8453,   // Base
+      10,     // Optimism
+      137,    // Polygon
+      42161,  // Arbitrum
+      43114,  // Avalanche
+      56,     // Binance Smart Chain
+      59144,  // Linea
+      146,    // Sonic
+      1301,   // Unichain
+      100,    // Gnosis
+      324,    // zkSync
+    ]
     return supported.includes(chainId)
   }
 

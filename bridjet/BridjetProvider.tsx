@@ -1,9 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import { requireBridjetConfig } from './config'
 import { getAdapterRegistry, initializeDefaultAdapters, setupAdapters } from './adapters/adapter-registry'
 import { wagmiConfig } from './wagmi-config'
+import '@rainbow-me/rainbowkit/styles.css'
 
 export type BridjetProviderType = string | null
 
@@ -130,9 +132,19 @@ export function BridjetProvider({ children }: BridjetProviderProps) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <BridjetContext.Provider value={value}>
-          {children}
-        </BridjetContext.Provider>
+        <RainbowKitProvider
+          theme={darkTheme({
+            accentColor: '#7b3ff2',
+            accentColorForeground: 'white',
+            borderRadius: 'medium',
+            fontStack: 'system',
+          })}
+          modalSize="compact"
+        >
+          <BridjetContext.Provider value={value}>
+            {children}
+          </BridjetContext.Provider>
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )

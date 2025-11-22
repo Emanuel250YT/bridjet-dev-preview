@@ -119,6 +119,13 @@ export {
   getChainByName,
   chainNameToId,
   metadata as wagmiMetadata,
+  // Custom chains
+  sonic,
+  unichain,
+  // 1inch Fusion+ utilities
+  oneInchFusionContracts,
+  getOneInchContract,
+  supportsOneInch,
 } from './wagmi-config'
 
 // Cross-chain service (1inch Aqua)
@@ -142,4 +149,8 @@ export {
   useSendTransaction,
   useWaitForTransactionReceipt,
 } from 'wagmi'
+
+// Re-export RainbowKit components
+export { ConnectButton } from '@rainbow-me/rainbowkit'
+export type { Address } from 'viem'
 

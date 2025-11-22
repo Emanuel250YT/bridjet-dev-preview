@@ -5,15 +5,184 @@
   text-align: center;
 }
 
+/* Estilos para RainbowKit */
+.rainbow-connect-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Secciones de la app */
+.wallet-section,
+.payment-section,
+.token-section,
+.account-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wallet-section h2,
+.payment-section h2,
+.token-section h2,
+.account-section h2 {
+  margin-top: 0;
+  color: #7b3ff2;
+}
+
+/* Form Styles */
+.form-group {
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #7b3ff2;
+  box-shadow: 0 0 0 3px rgba(123, 63, 242, 0.1);
+}
+
+/* Button Styles */
+.send-button,
+.switch-button,
+.disconnect-button,
+.connector-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.send-button {
+  background: linear-gradient(135deg, #7b3ff2 0%, #6c63ff 100%);
+  color: white;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.send-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(123, 63, 242, 0.4);
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.switch-button {
+  background: #ff9500;
+  color: white;
+}
+
+.disconnect-button {
+  background: #ff3b30;
+  color: white;
+}
+
+.connector-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  margin: 0.5rem;
+}
+
+/* Info Messages */
+.warning,
+.error,
+.info {
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.warning {
+  background: rgba(255, 149, 0, 0.1);
+  border: 1px solid rgba(255, 149, 0, 0.3);
+}
+
+.error {
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: #ff3b30;
+}
+
+.info {
+  background: rgba(52, 199, 89, 0.1);
+  border: 1px solid rgba(52, 199, 89, 0.3);
+}
+
+/* Connected Info */
+.connected-info {
+  padding: 1rem;
+  background: rgba(52, 199, 89, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(52, 199, 89, 0.3);
+}
+
+.connected-info .address {
+  font-family: monospace;
+  font-size: 0.9rem;
+  word-break: break-all;
+  margin: 1rem 0;
+}
+
+/* Connector Grid */
+.connector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+/* Account Info */
+.account-info {
+  text-align: left;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.account-info p {
+  margin: 0.5rem 0;
+}
+
+/* Logo animations */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -31,6 +200,23 @@
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
+}
+
+/* Footer */
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+footer a {
+  color: #7b3ff2;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 
 .card {
