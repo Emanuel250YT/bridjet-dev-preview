@@ -12,7 +12,9 @@
     "server:dev": "tsx watch server.ts"
   },
   "dependencies": {
+    "@celo/celo-composer": "^2.4.12",
     "@farcaster/miniapp-sdk": "^0.2.1",
+    "@lemoncash/mini-app-sdk": "^0.1.9",
     "@worldcoin/minikit-js": "^1.9.8",
     "express": "^5.1.0",
     "react": "^19.1.1",

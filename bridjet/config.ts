@@ -40,6 +40,9 @@ export interface BridjetConfig {
   autoInitializeAdapters?: boolean
 }
 
+// Default provider types (including Celo, excluding disabled XMTP and Rootstock)
+export const DEFAULT_PROVIDER_TYPES = ['worldcoin', 'lemon', 'farcaster', 'base', 'celo'] as const
+
 let globalConfig: BridjetConfig | null = null
 
 export function setupBridjet(config: BridjetConfig): void {

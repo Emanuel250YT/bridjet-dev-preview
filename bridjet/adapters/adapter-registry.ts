@@ -3,8 +3,10 @@ import { WorldCoinAdapter } from './worldcoin-adapter'
 import { LemonAdapter } from './lemon-adapter'
 import { FarcasterAdapter } from './farcaster-adapter'
 import { BaseAdapter } from './base-adapter-provider'
-import { RostockAdapter } from './rostock-adapter'
-import { XMTPAdapter } from './xmtp-adapter'
+import { CeloAdapter } from './celo-adapter'
+// TEMPORARILY DISABLED - Incompatibility issues
+// import { RostockAdapter } from './rostock-adapter'
+// import { XMTPAdapter } from './xmtp-adapter'
 
 class AdapterRegistry {
   private adapters: Map<string, ProviderAdapter> = new Map()
@@ -67,13 +69,18 @@ export const AdapterFactory = {
     return new BaseAdapter(options)
   },
 
-  createRostock(options?: AdapterOptions): RostockAdapter {
-    return new RostockAdapter(options)
+  createCelo(options?: AdapterOptions): CeloAdapter {
+    return new CeloAdapter(options)
   },
 
-  createXMTP(options?: AdapterOptions): XMTPAdapter {
-    return new XMTPAdapter(options)
-  },
+  // TEMPORARILY DISABLED - Incompatibility issues
+  // createRostock(options?: AdapterOptions): RostockAdapter {
+  //   return new RostockAdapter(options)
+  // },
+
+  // createXMTP(options?: AdapterOptions): XMTPAdapter {
+  //   return new XMTPAdapter(options)
+  // },
 }
 
 export function initializeDefaultAdapters(): void {
@@ -81,8 +88,11 @@ export function initializeDefaultAdapters(): void {
   globalRegistry.register(AdapterFactory.createLemon(), false)
   globalRegistry.register(AdapterFactory.createFarcaster(), false)
   globalRegistry.register(AdapterFactory.createBase(), false)
-  globalRegistry.register(AdapterFactory.createRostock(), false)
-  globalRegistry.register(AdapterFactory.createXMTP(), false)
+  globalRegistry.register(AdapterFactory.createCelo(), false)
+  
+  // TEMPORARILY DISABLED - Incompatibility issues
+  // globalRegistry.register(AdapterFactory.createRostock(), false)
+  // globalRegistry.register(AdapterFactory.createXMTP(), false)
   
   if (!globalRegistry.getDefault()) {
     globalRegistry.register(AdapterFactory.createFarcaster(), true)
