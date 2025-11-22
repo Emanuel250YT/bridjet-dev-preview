@@ -14,6 +14,9 @@ export interface ContractActionPayload {
   params?: any[]
   value?: string
   gas?: string
+  chainId?: number
+  chainName?: string
+  abi?: any
   [key: string]: any
 }
 
@@ -23,6 +26,8 @@ export interface PaymentPayload {
   currency?: string
   description?: string
   reference?: string
+  chainId?: number
+  chainName?: string
   [key: string]: any
 }
 
@@ -32,6 +37,12 @@ export interface TokenTransferPayload {
   tokenAddress: string
   tokenSymbol?: string
   decimals?: number
+  fromChainId?: number
+  fromChainName?: string
+  toChainId?: number
+  toChainName?: string
+  toTokenAddress?: string
+  enableCrossChain?: boolean
   [key: string]: any
 }
 

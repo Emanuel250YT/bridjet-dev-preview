@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { WagmiProvider } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { requireBridjetConfig } from './config'
 import { getAdapterRegistry, initializeDefaultAdapters, setupAdapters } from './adapters/adapter-registry'
+import { wagmiConfig } from './wagmi-config'
 
 export type BridjetProviderType = string | null
 
@@ -17,6 +20,16 @@ interface BridjetContextType {
     profile: string
   }
 }
+
+// QueryClient para React Query (requerido por wagmi)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+})
 
 const BridjetContext = createContext<BridjetContextType | undefined>(undefined)
 
@@ -115,9 +128,13 @@ export function BridjetProvider({ children }: BridjetProviderProps) {
   }
 
   return (
-    <BridjetContext.Provider value={value}>
-      {children}
-    </BridjetContext.Provider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <BridjetContext.Provider value={value}>
+          {children}
+        </BridjetContext.Provider>
+      </QueryClientProvider>
+    </WagmiProvider>
   )
 }
 

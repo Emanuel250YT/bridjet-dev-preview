@@ -11,6 +11,7 @@ export * from './farcaster-native'
 export * from './celo-native'
 
 // XMTP Native Exports (TEMPORARILY DISABLED)
+/*
 export {
   XMTPConfig,
   useXMTP,
@@ -25,3 +26,4 @@ export {
   RootstockNativeWrapper,
   RootstockComponent,
 } from './rostock-native'
+*/

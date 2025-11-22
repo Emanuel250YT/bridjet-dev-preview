@@ -36,7 +36,32 @@ export {
   SendTokens,
   CreateWallet,
   AddWallet,
+  // Web Components (wagmi)
+  SendPaymentWeb,
+  SendTokensWeb,
+  SendContractActionWeb,
+  // API Components
+  SendPaymentAPI,
+  SendTokensAPI,
+  SendContractActionAPI,
+  // Wallet Connector
+  WalletConnector,
 } from './components'
+
+export type {
+  SendPaymentWebPayload,
+  SendPaymentWebResponse,
+  SendTokensWebPayload,
+  SendTokensWebResponse,
+  SendContractActionWebPayload,
+  SendContractActionWebResponse,
+} from './components/web'
+
+export type {
+  SendPaymentAPIPayload,
+  SendTokensAPIPayload,
+  SendContractActionAPIPayload,
+} from './components/api'
 
 export {
   setupBridjet,
@@ -84,4 +109,37 @@ export * from './native'
 
 // Export default provider types constant
 export { DEFAULT_PROVIDER_TYPES } from './config'
+
+// Wagmi configuration and utilities
+export {
+  wagmiConfig,
+  supportedChains,
+  getChainById,
+  isChainSupported,
+  getChainByName,
+  chainNameToId,
+  metadata as wagmiMetadata,
+} from './wagmi-config'
+
+// Cross-chain service (1inch Aqua)
+export {
+  crossChainService,
+  getCrossChainService,
+  type CrossChainQuoteParams,
+  type CrossChainQuote,
+  type SwapExecutionResult,
+} from './services/cross-chain-service'
+
+// Re-export wagmi hooks for convenience
+export {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useSwitchChain,
+  useBalance,
+  useReadContract,
+  useWriteContract,
+  useSendTransaction,
+  useWaitForTransactionReceipt,
+} from 'wagmi'
 
