@@ -15,8 +15,27 @@ export interface BridjetConfig {
     defaultPath?: string
     defaultConfig?: string | object | (() => Promise<string | object>)
   }
+  api?: {
+    baseUrl?: string
+    endpoints?: {
+      signIn?: string
+      signOut?: string
+      signUp?: string
+      refreshToken?: string
+      validateToken?: string
+      profile?: string
+    }
+    timeout?: number
+    headers?: Record<string, string>
+  }
+  session?: {
+    storageKey?: string
+    autoRefresh?: boolean
+    refreshInterval?: number
+  }
   messages?: {
     useBridjetError?: string
+    useBridjetSessionError?: string
   }
   autoInitializeAdapters?: boolean
 }

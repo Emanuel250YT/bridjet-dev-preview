@@ -7,6 +7,15 @@ export type BridjetProviderType = string | null
 interface BridjetContextType {
   provider: BridjetProviderType
   host: string
+  apiBaseUrl: string
+  apiEndpoints: {
+    signIn: string
+    signOut: string
+    signUp: string
+    refreshToken: string
+    validateToken: string
+    profile: string
+  }
 }
 
 const BridjetContext = createContext<BridjetContextType | undefined>(undefined)
@@ -45,6 +54,16 @@ export function BridjetProvider({ children }: BridjetProviderProps) {
   const initialDetection = detectProviderSync(config)
   const [provider, setProvider] = useState<BridjetProviderType>(initialDetection.provider)
   const [host, setHost] = useState<string>(initialDetection.host)
+
+  const apiBaseUrl = config.api?.baseUrl || ''
+  const apiEndpoints = {
+    signIn: config.api?.endpoints?.signIn || '/auth/signin',
+    signOut: config.api?.endpoints?.signOut || '/auth/signout',
+    signUp: config.api?.endpoints?.signUp || '/auth/signup',
+    refreshToken: config.api?.endpoints?.refreshToken || '/auth/refresh',
+    validateToken: config.api?.endpoints?.validateToken || '/auth/validate',
+    profile: config.api?.endpoints?.profile || '/auth/profile',
+  }
 
   useEffect(() => {
     if (config.autoInitializeAdapters !== false) {
@@ -91,6 +110,8 @@ export function BridjetProvider({ children }: BridjetProviderProps) {
   const value: BridjetContextType = {
     provider,
     host,
+    apiBaseUrl,
+    apiEndpoints,
   }
 
   return (

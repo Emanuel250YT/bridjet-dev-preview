@@ -1,6 +1,16 @@
 export { BridjetProvider, useBridjet } from './BridjetProvider'
 export type { BridjetProviderType } from './BridjetProvider'
 export { BridjetComponent } from './BridjetComponent'
+export { BridjetSession, useBridjetSession, useBridjetAuthHeaders, useBridjetRequest } from './BridjetSession'
+
+export {
+  authService,
+  getAuthService,
+  type User,
+  type SignInCredentials,
+  type SignUpData,
+  type AuthResponse,
+} from './auth-service'
 
 export {
   setupBridjet,
