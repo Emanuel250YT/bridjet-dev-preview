@@ -37,7 +37,23 @@ class CrossChainService {
   private apiKey: string
 
   constructor(apiKey?: string) {
-    this.apiKey = apiKey || process.env.VITE_1INCH_API_KEY || ''
+    // Soporte para múltiples bundlers/frameworks
+    this.apiKey = apiKey || this.getEnvApiKey() || ''
+  }
+
+  private getEnvApiKey(): string {
+    // Vite
+    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_1INCH_API_KEY) {
+      return import.meta.env.VITE_1INCH_API_KEY
+    }
+    // Next.js / Node.js / CRA
+    if (typeof process !== 'undefined' && process.env) {
+      return process.env.NEXT_PUBLIC_1INCH_API_KEY || 
+             process.env.REACT_APP_1INCH_API_KEY || 
+             process.env.VITE_1INCH_API_KEY || 
+             ''
+    }
+    return ''
   }
 
   private initSDK() {
