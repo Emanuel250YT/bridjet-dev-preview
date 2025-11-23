@@ -3,10 +3,12 @@ import {
   useAccount, 
   useWriteContract, 
   useSwitchChain,
+  useSendTransaction,
 } from 'wagmi'
 import { erc20Abi, type Address } from 'viem'
 import { getChainByName, isChainSupported } from '../../wagmi-config'
 import { getCrossChainService } from '../../services/cross-chain-service'
+import { getSwapService } from '../../services/swap-service'
 
 export interface SendTokensWebPayload {
   recipient: Address
@@ -59,8 +61,10 @@ export function SendTokensWeb({
   const { address: walletAddress, chainId: currentChainId } = useAccount()
   const { switchChainAsync } = useSwitchChain()
   const { writeContractAsync, isPending: isWritePending } = useWriteContract()
+  const { sendTransactionAsync } = useSendTransaction()
   
   const crossChainService = getCrossChainService()
+  const swapService = getSwapService()
 
   // Determinar el chain ID de origen
   const fromChainId = payload.fromChainId || 
@@ -72,13 +76,18 @@ export function SendTokensWeb({
     (payload.toChainName ? getChainByName(payload.toChainName)?.id : undefined) ||
     fromChainId
 
-  // Determinar si es cross-chain
+  // Determinar tipo de operación
+  const isSameChainSwap = Boolean(
+    fromChainId === toChainId && 
+    payload.toTokenAddress && 
+    payload.tokenAddress.toLowerCase() !== payload.toTokenAddress.toLowerCase()
+  )
+
   const isCrossChain = Boolean(
     payload.enableCrossChain && 
     fromChainId && 
     toChainId && 
-    (fromChainId !== toChainId || 
-     (payload.toTokenAddress && payload.tokenAddress.toLowerCase() !== payload.toTokenAddress.toLowerCase()))
+    fromChainId !== toChainId
   )
 
   const needsChainSwitch = Boolean(
@@ -125,6 +134,43 @@ export function SendTokensWeb({
 
     return txHash
   }, [walletAddress, payload, fromChainId, writeContractAsync])
+
+  const sendSameChainSwap = useCallback(async () => {
+    if (!walletAddress || !fromChainId) {
+      throw new Error('Missing parameters for swap')
+    }
+
+    if (!payload.toTokenAddress) {
+      throw new Error('toTokenAddress required for swaps')
+    }
+
+    const decimals = payload.decimals || 18
+    const amount = (BigInt(parseFloat(payload.amount) * Math.pow(10, decimals))).toString()
+
+    const swapTx = await swapService.getSwapTransaction({
+      chainId: fromChainId,
+      src: payload.tokenAddress,
+      dst: payload.toTokenAddress,
+      amount,
+      from: walletAddress,
+      slippage: 1,
+    })
+
+    const txHash = await sendTransactionAsync({
+      to: swapTx.to,
+      data: swapTx.data as `0x${string}`,
+      value: BigInt(swapTx.value),
+      chainId: fromChainId,
+    })
+
+    return txHash
+  }, [
+    walletAddress,
+    fromChainId,
+    payload,
+    swapService,
+    sendTransactionAsync,
+  ])
 
   const sendCrossChainTransfer = useCallback(async () => {
     if (!walletAddress || !fromChainId || !toChainId) {
@@ -210,7 +256,10 @@ export function SendTokensWeb({
 
       let txHash: string
 
-      if (isCrossChain) {
+      if (isSameChainSwap) {
+        // Swap en la misma red usando 1inch Classic Swap
+        txHash = await sendSameChainSwap()
+      } else if (isCrossChain) {
         // Usar 1inch Aqua para cross-chain
         txHash = await sendCrossChainTransfer()
       } else {
@@ -221,7 +270,9 @@ export function SendTokensWeb({
       const successResponse: SendTokensWebResponse = {
         txHash,
         status: 'success',
-        message: isCrossChain 
+        message: isSameChainSwap
+          ? `Swap completado: ${txHash}`
+          : isCrossChain 
           ? `Transferencia cross-chain iniciada: ${txHash}`
           : `Tokens enviados exitosamente: ${txHash}`,
         isCrossChain,
@@ -243,11 +294,13 @@ export function SendTokensWeb({
     }
   }, [
     walletAddress,
+    isSameChainSwap,
     isCrossChain,
     needsChainSwitch,
     autoSwitchChain,
     switchChain,
     fromChainId,
+    sendSameChainSwap,
     sendCrossChainTransfer,
     sendDirectTransfer,
     onSuccess,

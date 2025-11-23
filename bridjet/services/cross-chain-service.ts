@@ -202,7 +202,7 @@ class CrossChainService {
 let crossChainServiceInstance: CrossChainService | null = null
 
 export function getCrossChainService(apiKey?: string): CrossChainService {
-  if (!crossChainServiceInstance) {
+  if (!crossChainServiceInstance || apiKey) {
     crossChainServiceInstance = new CrossChainService(apiKey)
   }
   return crossChainServiceInstance

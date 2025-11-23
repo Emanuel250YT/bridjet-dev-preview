@@ -6,3 +6,6 @@ export type { SendTokensWebPayload, SendTokensWebResponse } from './SendTokensWe
 
 export { SendContractActionWeb } from './SendContractActionWeb'
 export type { SendContractActionWebPayload, SendContractActionWebResponse } from './SendContractActionWeb'
+
+export { SwapTokensWeb } from './SwapTokensWeb'
+export type { SwapTokensWebPayload, SwapTokensWebResponse } from './SwapTokensWeb'

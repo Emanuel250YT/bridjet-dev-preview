@@ -40,6 +40,7 @@ export {
   SendPaymentWeb,
   SendTokensWeb,
   SendContractActionWeb,
+  SwapTokensWeb,
   // API Components
   SendPaymentAPI,
   SendTokensAPI,
@@ -55,6 +56,8 @@ export type {
   SendTokensWebResponse,
   SendContractActionWebPayload,
   SendContractActionWebResponse,
+  SwapTokensWebPayload,
+  SwapTokensWebResponse,
 } from './components/web'
 
 export type {
@@ -136,6 +139,22 @@ export {
   type CrossChainQuote,
   type SwapExecutionResult,
 } from './services/cross-chain-service'
+
+// Swap service (1inch Classic Swap)
+export {
+  swapService,
+  getSwapService,
+  type SwapQuoteParams,
+  type SwapQuote,
+  type SwapTransaction,
+} from './services/swap-service'
+
+// Wallet service (Private key transactions)
+export {
+  walletService,
+  getWalletService,
+  type WalletSwapParams,
+} from './services/wallet-service'
 
 // Re-export wagmi hooks for convenience
 export {

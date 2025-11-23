@@ -5,6 +5,8 @@ import App from "./App.tsx";
 import { MiniKitProvider } from "@worldcoin/minikit-js/minikit-provider";
 import { BridjetComponent, BridjetProvider, setupBridjet } from "../bridjet";
 import { WorldcoinBody } from "./components/WorldcoinBody.tsx";
+import { SwapExample } from "./SwapExample.tsx";
+import { CrossChainExample } from "./CrossChainExample.tsx";
 
 setupBridjet({
   providers: {
@@ -42,7 +44,11 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BridjetProvider>
       <BridjetComponent provider="base">
-        <h1>Running with base</h1>
+        <div>
+          <SwapExample />
+          <hr style={{ margin: '40px 0' }} />
+          <CrossChainExample />
+        </div>
       </BridjetComponent>
 
       <BridjetComponent provider="worldcoin">
