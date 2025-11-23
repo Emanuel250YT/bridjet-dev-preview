@@ -12,7 +12,7 @@
     "server:dev": "tsx watch server.ts",
     "test:transfer": "tsx test-transfer-service.ts"
   },
-  "dependencies": {
+"dependencies": {
     "@1inch/cross-chain-sdk": "^1.1.1",
     "@celo/celo-composer": "^2.4.12",
     "@farcaster/miniapp-sdk": "^0.2.1",
