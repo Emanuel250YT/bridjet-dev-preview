@@ -37,7 +37,7 @@ class CrossChainService {
   private apiKey: string
 
   constructor(apiKey?: string) {
-    // Soporte para múltiples bundlers/frameworks
+    // API key es opcional - el backend puede proveerla
     this.apiKey = apiKey || this.getEnvApiKey() || ''
   }
 
@@ -48,9 +48,9 @@ class CrossChainService {
     }
     // Next.js / Node.js / CRA
     if (typeof process !== 'undefined' && process.env) {
-      return process.env.NEXT_PUBLIC_1INCH_API_KEY || 
+      return process.env.VITE_1INCH_API_KEY ||
+             process.env.NEXT_PUBLIC_1INCH_API_KEY || 
              process.env.REACT_APP_1INCH_API_KEY || 
-             process.env.VITE_1INCH_API_KEY || 
              ''
     }
     return ''
@@ -59,7 +59,7 @@ class CrossChainService {
   private initSDK() {
     if (!this.sdk) {
       if (!this.apiKey) {
-        throw new Error('1inch API key is required. Set VITE_1INCH_API_KEY in your environment.')
+        throw new Error('1inch API key not configured. Set VITE_1INCH_API_KEY in your environment.')
       }
       this.sdk = new SDK({
         url: 'https://api.1inch.dev/fusion-plus',
@@ -208,6 +208,4 @@ export function getCrossChainService(apiKey?: string): CrossChainService {
   return crossChainServiceInstance
 }
 
-export const crossChainService = getCrossChainService()
-
-export default crossChainService
+export default CrossChainService

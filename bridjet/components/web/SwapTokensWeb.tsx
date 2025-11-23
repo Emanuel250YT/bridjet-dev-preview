@@ -2,7 +2,6 @@ import { useState, useCallback, type ReactNode } from 'react'
 import { useAccount, useSendTransaction, useSwitchChain } from 'wagmi'
 import { type Address } from 'viem'
 import { getChainByName, isChainSupported } from '../../wagmi-config'
-import { getSwapService } from '../../services/swap-service'
 
 export interface SwapTokensWebPayload {
   fromToken: Address
@@ -46,13 +45,10 @@ export function SwapTokensWeb({
 }: SwapTokensWebProps) {
   const [error, setError] = useState<string | null>(null)
   const [response, setResponse] = useState<SwapTokensWebResponse | null>(null)
-  const [quote, setQuote] = useState<any>(null)
   
   const { address: walletAddress, chainId: currentChainId } = useAccount()
   const { switchChainAsync } = useSwitchChain()
-  const { sendTransactionAsync, isPending } = useSendTransaction()
-  
-  const swapService = getSwapService()
+  const { isPending } = useSendTransaction()
 
   const targetChainId = payload.chainId || 
     (payload.chainName ? getChainByName(payload.chainName)?.id : undefined) ||
@@ -74,19 +70,11 @@ export function SwapTokensWeb({
     if (!walletAddress || !targetChainId) return
     
     try {
-      const quoteResult = await swapService.getQuote({
-        chainId: targetChainId,
-        src: payload.fromToken,
-        dst: payload.toToken,
-        amount: payload.amount,
-        from: walletAddress,
-        slippage: payload.slippage || 1,
-      })
-      setQuote(quoteResult)
+      throw new Error('Quotes must be fetched through the backend API')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error getting quote')
     }
-  }, [walletAddress, targetChainId, payload, swapService])
+  }, [walletAddress, targetChainId])
 
   const swap = useCallback(async () => {
     if (!walletAddress || !targetChainId) throw new Error('Wallet not connected')
@@ -97,31 +85,7 @@ export function SwapTokensWeb({
     try {
       if (needsChainSwitch && autoSwitchChain) await switchChain()
 
-      const swapTx = await swapService.getSwapTransaction({
-        chainId: targetChainId,
-        src: payload.fromToken,
-        dst: payload.toToken,
-        amount: payload.amount,
-        from: walletAddress,
-        slippage: payload.slippage || 1,
-      })
-
-      const txHash = await sendTransactionAsync({
-        to: swapTx.to,
-        data: swapTx.data as `0x${string}`,
-        value: BigInt(swapTx.value),
-        chainId: targetChainId,
-      })
-
-      const successResponse: SwapTokensWebResponse = {
-        txHash,
-        status: 'success',
-        message: `Swap completed: ${txHash}`,
-        quote,
-      }
-
-      setResponse(successResponse)
-      onSuccess?.(successResponse)
+      throw new Error('Swaps must be handled through the backend API. Use POST /api/wallet/transfer')
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Swap failed'
       const failedResponse: SwapTokensWebResponse = {
@@ -133,7 +97,7 @@ export function SwapTokensWeb({
       setResponse(failedResponse)
       onError?.(err instanceof Error ? err : new Error(errorMessage))
     }
-  }, [walletAddress, targetChainId, payload, needsChainSwitch, autoSwitchChain, switchChain, swapService, sendTransactionAsync, quote, onSuccess, onError])
+  }, [walletAddress, targetChainId, needsChainSwitch, autoSwitchChain, switchChain, onSuccess, onError])
 
   return (
     <>
@@ -145,7 +109,7 @@ export function SwapTokensWeb({
         response,
         needsChainSwitch,
         switchChain,
-        quote,
+        quote: null,
       })}
     </>
   )

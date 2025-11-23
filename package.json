@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "tsx server.ts",
-    "server:dev": "tsx watch server.ts"
+    "server:dev": "tsx watch server.ts",
+    "test:transfer": "tsx test-transfer-service.ts"
   },
   "dependencies": {
     "@1inch/cross-chain-sdk": "^1.1.1",

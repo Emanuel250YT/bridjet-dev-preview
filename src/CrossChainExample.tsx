@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { createWalletClient, http, parseUnits } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { base, bsc } from 'viem/chains'
+import { base } from 'viem/chains'
 import { getCrossChainService } from '../bridjet/services/cross-chain-service'
 import type { Address } from 'viem'
 

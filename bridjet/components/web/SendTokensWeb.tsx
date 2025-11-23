@@ -3,12 +3,9 @@ import {
   useAccount, 
   useWriteContract, 
   useSwitchChain,
-  useSendTransaction,
 } from 'wagmi'
 import { erc20Abi, type Address } from 'viem'
 import { getChainByName, isChainSupported } from '../../wagmi-config'
-import { getCrossChainService } from '../../services/cross-chain-service'
-import { getSwapService } from '../../services/swap-service'
 
 export interface SendTokensWebPayload {
   recipient: Address
@@ -61,10 +58,6 @@ export function SendTokensWeb({
   const { address: walletAddress, chainId: currentChainId } = useAccount()
   const { switchChainAsync } = useSwitchChain()
   const { writeContractAsync, isPending: isWritePending } = useWriteContract()
-  const { sendTransactionAsync } = useSendTransaction()
-  
-  const crossChainService = getCrossChainService()
-  const swapService = getSwapService()
 
   // Determinar el chain ID de origen
   const fromChainId = payload.fromChainId || 
@@ -144,32 +137,11 @@ export function SendTokensWeb({
       throw new Error('toTokenAddress required for swaps')
     }
 
-    const decimals = payload.decimals || 18
-    const amount = (BigInt(parseFloat(payload.amount) * Math.pow(10, decimals))).toString()
-
-    const swapTx = await swapService.getSwapTransaction({
-      chainId: fromChainId,
-      src: payload.tokenAddress,
-      dst: payload.toTokenAddress,
-      amount,
-      from: walletAddress,
-      slippage: 1,
-    })
-
-    const txHash = await sendTransactionAsync({
-      to: swapTx.to,
-      data: swapTx.data as `0x${string}`,
-      value: BigInt(swapTx.value),
-      chainId: fromChainId,
-    })
-
-    return txHash
+    throw new Error('Swaps must be handled through the backend API. Use POST /api/wallet/transfer')
   }, [
     walletAddress,
     fromChainId,
     payload,
-    swapService,
-    sendTransactionAsync,
   ])
 
   const sendCrossChainTransfer = useCallback(async () => {
@@ -181,51 +153,12 @@ export function SendTokensWeb({
       throw new Error('Se requiere toTokenAddress para transferencias cross-chain')
     }
 
-    // Verificar si 1inch soporta las redes
-    if (!crossChainService.isNetworkSupported(fromChainId) || 
-        !crossChainService.isNetworkSupported(toChainId)) {
-      throw new Error('Una o ambas redes no son soportadas por 1inch Aqua')
-    }
-
-    // Calcular el amount en unidades base del token
-    const decimals = payload.decimals || 18
-    const amount = (BigInt(parseFloat(payload.amount) * Math.pow(10, decimals))).toString()
-
-    // Obtener la transacción de 1inch
-    const swapTx = await crossChainService.buildSwapTransaction({
-      fromChainId,
-      toChainId,
-      fromTokenAddress: payload.tokenAddress,
-      toTokenAddress: payload.toTokenAddress,
-      amount,
-      walletAddress,
-    })
-
-    // Ejecutar la transacción de swap
-    const txHash = await writeContractAsync({
-      address: swapTx.to,
-      abi: [
-        {
-          inputs: [],
-          name: 'swap',
-          outputs: [],
-          stateMutability: 'payable',
-          type: 'function',
-        },
-      ] as const,
-      functionName: 'swap',
-      value: BigInt(swapTx.value),
-      chainId: fromChainId,
-    })
-
-    return txHash
+    throw new Error('Cross-chain transfers must be handled through the backend API. Use POST /api/wallet/transfer')
   }, [
     walletAddress,
     fromChainId,
     toChainId,
     payload,
-    crossChainService,
-    writeContractAsync,
   ])
 
   const send = useCallback(async () => {

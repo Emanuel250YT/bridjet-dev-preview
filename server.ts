@@ -3,6 +3,7 @@ import { createServer as createViteServer } from 'vite'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { readFileSync } from 'fs'
+import walletRouter from './bridjet/api/wallet.ts'
 
 const { createSwitchAdapter, createRoutingRules, setupBridjet } = await import('./bridjet/index.ts')
 
@@ -30,8 +31,14 @@ const isProd = process.env.NODE_ENV === 'production'
 async function startServer() {
   const app = express()
 
+  // Middleware para parsear JSON
+  app.use(express.json())
+
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
+
+  // API Routes
+  app.use('/api/wallet', walletRouter)
 
   const adapter = createSwitchAdapter({
     routingRules: [

@@ -1,18 +1,28 @@
 # 🌉 Bridjet - Multi-Chain Web3 Payment Framework
 
-Bridjet es un framework de React para construir aplicaciones de pagos y operaciones blockchain multi-cadena con soporte para múltiples wallets (MetaMask, WalletConnect, Coinbase) y transferencias cross-chain usando 1inch Aqua.
+Bridjet es un framework de React para construir aplicaciones de pagos y operaciones blockchain multi-cadena con soporte para múltiples wallets (MetaMask, WalletConnect, Coinbase) y transferencias cross-chain usando 1inch.
+
+## ⚠️ Cambios Importantes v2.0
+
+La versión 2.0 introduce cambios importantes en la arquitectura:
+
+- **✅ API Keys como parámetros**: Ya no se detectan automáticamente desde variables de entorno
+- **✅ Framework-agnostic**: Compatible con Vite, Next.js, CRA, Webpack, etc.
+- **✅ Componentes simplificados**: Eliminados componentes legacy innecesarios
+- **✅ Nuevo endpoint universal**: `/api/wallet/transfer` para transferencias, swaps y bridges
+
+**📖 Consulta la [Guía de Migración](./MIGRATION_GUIDE.md) si actualizas desde v1.x**
 
 ## ✨ Características
 
 - 🦊 **Multi-Wallet**: MetaMask, WalletConnect, Coinbase Wallet y más
 - 🌐 **Multi-Chain**: Ethereum, Polygon, Celo, Arbitrum, Optimism, Base
-- 🔄 **Cross-Chain Swaps**: Transferencias entre redes usando 1inch Aqua
-- ⚡ **Dos Modos de Operación**:
-  - **Web Mode**: Interacción directa con blockchain usando wagmi
-  - **API Mode**: Procesamiento a través de tu backend
+- 🔄 **Universal Transfer API**: Transferencias nativas, swaps y bridges en un solo endpoint
+- ⚡ **Componentes Web**: Interacción directa con blockchain usando wagmi
 - 🎯 **Type-Safe**: TypeScript completo con tipos estrictos
 - 🧩 **Componentes Atómicos**: Componentes reutilizables para operaciones comunes
-- 🔌 **Pluggable Adapters**: Sistema extensible de adaptadores
+- 🔌 **Pluggable**: Sistema extensible de adaptadores y servicios
+- 🛠️ **Framework-agnostic**: Funciona con Vite, Next.js, CRA, etc.
 
 ## 📦 Instalación
 
@@ -172,6 +182,73 @@ function CrossChainTransfer() {
 }
 ```
 
+## 📚 Documentación
+
+- 📘 **[Guía de Migración v2.0](./MIGRATION_GUIDE.md)** - Cómo migrar desde v1.x
+- 📗 **[API de Transferencias](./TRANSACTION_API.md)** - Documentación del endpoint universal
+- 📙 **[Guía de Uso Completa](./USAGE_GUIDE.md)** - Ejemplos detallados (si existe)
+
+## 🚀 Quick Start con Transfer API
+
+### 1. Configurar variables de entorno
+
+```env
+# .env
+VITE_1INCH_API_KEY=tu_api_key_aqui
+```
+
+### 2. Usar el servicio de transferencias
+
+```typescript
+import { getTransferService } from 'bridjet/services/transfer-service'
+
+const apiKey = import.meta.env.VITE_1INCH_API_KEY
+
+const transferService = getTransferService()
+
+const result = await transferService.prepareTransfer({
+  from: '0xYourAddress',
+  to: '0xRecipient',
+  amount: '1000000000000000', // 0.001 ETH en wei
+  fromChainId: 8453, // Base
+  toChainId: 8453,
+  fromToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+  toToken: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',   // USDC
+  slippage: 1,
+  apiKey, // ⚠️ Requerido
+})
+
+// Ejecutar transacción con wallet
+const tx = await wallet.sendTransaction({
+  to: result.transaction.to,
+  data: result.transaction.data,
+  value: result.transaction.value,
+})
+```
+
+### 3. Usar el endpoint HTTP
+
+```typescript
+const response = await fetch('http://localhost:5173/api/wallet/transfer', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    from: '0xYourAddress',
+    to: '0xRecipient',
+    amount: '1000000000000000',
+    fromChainId: 8453,
+    toChainId: 8453,
+    fromToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    toToken: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+    slippage: 1,
+    apiKey: import.meta.env.VITE_1INCH_API_KEY,
+  }),
+})
+
+const result = await response.json()
+// result contiene la transacción lista para firmar
+```
+
 ## 📚 Documentación Completa
 
 Ver [USAGE_GUIDE.md](./USAGE_GUIDE.md) para ejemplos detallados y documentación completa.
@@ -197,16 +274,21 @@ Ver [USAGE_GUIDE.md](./USAGE_GUIDE.md) para ejemplos detallados y documentación
 
 ## 🛠️ Componentes Disponibles
 
-### Modo Web (wagmi)
+### Componentes Web (wagmi)
+- `UniversalSwap` - Swap universal (mismo chain, cross-chain, o directo)
+- `SwapTokensWeb` - Swap de tokens en la misma red
+- `SendTokensWeb` - Enviar tokens ERC20 (con soporte cross-chain)
 - `SendPaymentWeb` - Enviar moneda nativa
-- `SendTokensWeb` - Enviar tokens ERC20 (con cross-chain)
 - `SendContractActionWeb` - Ejecutar funciones de contratos
 - `WalletConnector` - Conectar/desconectar wallets
 
-### Modo API (backend)
-- `SendPaymentAPI` - Enviar pagos vía API
-- `SendTokensAPI` - Enviar tokens vía API
-- `SendContractActionAPI` - Ejecutar contratos vía API
+### Servicios
+- `TransferService` - Servicio unificado para transferencias, swaps y bridges
+- `SwapService` - Servicio de swaps usando 1inch
+- `CrossChainService` - Servicio de operaciones cross-chain
+- `WalletService` - Utilidades para wallets
+
+**⚠️ Nota:** Los componentes API y legacy fueron eliminados en v2.0
 
 ### Hooks de Wagmi
 Bridjet re-exporta todos los hooks de wagmi:

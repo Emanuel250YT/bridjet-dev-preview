@@ -28,24 +28,29 @@ class SwapService {
   private baseUrl = 'https://api.1inch.dev/swap/v6.1'
 
   constructor(apiKey?: string) {
+    // API key es opcional - el backend puede proveerla
     this.apiKey = apiKey || this.getEnvApiKey() || ''
   }
 
   private getEnvApiKey(): string {
+    // Vite
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_1INCH_API_KEY) {
       return import.meta.env.VITE_1INCH_API_KEY
     }
+    // Next.js / Node.js / CRA
     if (typeof process !== 'undefined' && process.env) {
-      return process.env.NEXT_PUBLIC_1INCH_API_KEY || 
+      return process.env.VITE_1INCH_API_KEY || 
+             process.env.NEXT_PUBLIC_1INCH_API_KEY || 
              process.env.REACT_APP_1INCH_API_KEY || 
-             process.env.VITE_1INCH_API_KEY || 
              ''
     }
     return ''
   }
 
   private async makeRequest<T>(endpoint: string, params: Record<string, string>): Promise<T> {
-    if (!this.apiKey) throw new Error('1inch API key required')
+    if (!this.apiKey) {
+      throw new Error('1inch API key not configured. Set VITE_1INCH_API_KEY in your environment or provide it in constructor.')
+    }
 
     const url = new URL(`${this.baseUrl}${endpoint}`)
     Object.entries(params).forEach(([key, value]) => {
@@ -97,5 +102,4 @@ export function getSwapService(apiKey?: string): SwapService {
   return swapServiceInstance
 }
 
-export const swapService = getSwapService()
-export default swapService
+export default SwapService

@@ -2,8 +2,6 @@ import { useState, useCallback, type ReactNode } from 'react'
 import { useAccount, useSendTransaction, useSwitchChain, useWriteContract } from 'wagmi'
 import { erc20Abi, type Address } from 'viem'
 import { getChainByName, isChainSupported } from '../../wagmi-config'
-import { getSwapService } from '../../services/swap-service'
-import { getCrossChainService } from '../../services/cross-chain-service'
 
 export interface UniversalSwapPayload {
   fromToken: Address
@@ -93,48 +91,12 @@ export function UniversalSwap({ payload, onSuccess, onError, children }: Univers
       // Cross-chain swap (different chains)
       else if (!isSameChain) {
         type = 'cross-chain'
-        const crossChainService = getCrossChainService()
-        const decimals = payload.decimals || 18
-        const amount = (BigInt(parseFloat(payload.amount) * Math.pow(10, decimals))).toString()
-
-        const swapTx = await crossChainService.buildSwapTransaction({
-          fromChainId,
-          toChainId: toChainId!,
-          fromTokenAddress: payload.fromToken,
-          toTokenAddress: payload.toToken,
-          amount,
-          walletAddress: address,
-        })
-
-        txHash = await sendTransactionAsync({
-          to: swapTx.to,
-          data: swapTx.data as `0x${string}`,
-          value: BigInt(swapTx.value || '0'),
-          chainId: fromChainId,
-        })
+        throw new Error('Cross-chain swaps must be handled through the backend API. Use POST /api/wallet/transfer')
       }
       // Same-chain swap (different tokens)
       else {
         type = 'same-chain'
-        const swapService = getSwapService()
-        const decimals = payload.decimals || 18
-        const amount = (BigInt(parseFloat(payload.amount) * Math.pow(10, decimals))).toString()
-
-        const swapTx = await swapService.getSwapTransaction({
-          chainId: fromChainId,
-          src: payload.fromToken,
-          dst: payload.toToken,
-          amount,
-          from: address,
-          slippage: payload.slippage || 1,
-        })
-
-        txHash = await sendTransactionAsync({
-          to: swapTx.to,
-          data: swapTx.data as `0x${string}`,
-          value: BigInt(swapTx.value || '0'),
-          chainId: fromChainId,
-        })
+        throw new Error('Same-chain swaps must be handled through the backend API. Use POST /api/wallet/transfer')
       }
 
       const successResponse: UniversalSwapResponse = {
