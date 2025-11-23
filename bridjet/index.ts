@@ -41,6 +41,7 @@ export {
   SendTokensWeb,
   SendContractActionWeb,
   SwapTokensWeb,
+  UniversalSwap,
   // API Components
   SendPaymentAPI,
   SendTokensAPI,
@@ -58,6 +59,8 @@ export type {
   SendContractActionWebResponse,
   SwapTokensWebPayload,
   SwapTokensWebResponse,
+  UniversalSwapPayload,
+  UniversalSwapResponse,
 } from './components/web'
 
 export type {

@@ -9,3 +9,6 @@ export type { SendContractActionWebPayload, SendContractActionWebResponse } from
 
 export { SwapTokensWeb } from './SwapTokensWeb'
 export type { SwapTokensWebPayload, SwapTokensWebResponse } from './SwapTokensWeb'
+
+export { UniversalSwap } from './UniversalSwap'
+export type { UniversalSwapPayload, UniversalSwapResponse } from './UniversalSwap'
