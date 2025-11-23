@@ -31,11 +31,7 @@ export {
 
 // Blockchain Atomic Components
 export {
-  SendContractAction,
-  SendPayment,
-  SendTokens,
-  CreateWallet,
-  AddWallet,
+
   // Web Components (wagmi)
   SendPaymentWeb,
   SendTokensWeb,
@@ -43,9 +39,7 @@ export {
   SwapTokensWeb,
   UniversalSwap,
   // API Components
-  SendPaymentAPI,
-  SendTokensAPI,
-  SendContractActionAPI,
+
   // Wallet Connector
   WalletConnector,
 } from './components'
@@ -63,11 +57,11 @@ export type {
   UniversalSwapResponse,
 } from './components/web'
 
-export type {
-  SendPaymentAPIPayload,
-  SendTokensAPIPayload,
-  SendContractActionAPIPayload,
-} from './components/api'
+// export type {
+//   SendPaymentAPIPayload,
+//   SendTokensAPIPayload,
+//   SendContractActionAPIPayload,
+// } from './components/api'
 
 export {
   setupBridjet,
@@ -136,7 +130,6 @@ export {
 
 // Cross-chain service (1inch Aqua)
 export {
-  crossChainService,
   getCrossChainService,
   type CrossChainQuoteParams,
   type CrossChainQuote,
@@ -145,7 +138,6 @@ export {
 
 // Swap service (1inch Classic Swap)
 export {
-  swapService,
   getSwapService,
   type SwapQuoteParams,
   type SwapQuote,
